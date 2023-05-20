@@ -29,6 +29,8 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.assertj:assertj-core:3.23.1'
+
 }
 
 tasks.named('test') {
