@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitchmele.grievbox.model.Grievance;
 import com.mitchmele.grievbox.model.GrievancesResponse;
 import com.mitchmele.grievbox.repository.GrievanceRepository;
+import com.mitchmele.grievbox.service.GrievanceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ import java.util.List;
 class GrievanceControllerTest {
 
     @Mock
-    private GrievanceRepository repository;
+    private GrievanceService grievanceService;
 
     @InjectMocks
     private GrievanceController controller;
@@ -44,7 +45,6 @@ class GrievanceControllerTest {
 
     @Test
     void getGrievances_shouldReturnListOfGrievances() throws Exception {
-
         Grievance grievance = Grievance.builder().text("Super Pissed at Mexican Restaurant").rating(4).build();
         Grievance grievance2 = Grievance.builder().text("Horrible Service in Uber").rating(6).build();
         Grievance grievance3 = Grievance.builder().text("Got a speeding ticket FUCK!").rating(10).build();
@@ -53,12 +53,12 @@ class GrievanceControllerTest {
 
         GrievancesResponse expected = GrievancesResponse.builder().grievances(grievances).build();
 
-        when(repository.findAll()).thenReturn(grievances);
+        when(grievanceService.getAllGrievances()).thenReturn(expected);
 
         mockMvc.perform(get("/grievances"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(mapper.writeValueAsString(expected)));
 
-        verify(repository).findAll();
+        verify(grievanceService).getAllGrievances();
     }
 }

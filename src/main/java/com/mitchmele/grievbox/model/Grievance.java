@@ -1,10 +1,7 @@
 package com.mitchmele.grievbox.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 
@@ -12,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Builder
 @Table(name = "grievance", schema = "public")
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class Grievance {
 
     @Id
@@ -24,16 +23,6 @@ public class Grievance {
     @Column(name = "rating", nullable = false)
     private long rating;
 
-    public Grievance(Long id, String text, long rating) {
-        this.id = id;
-        this.text = text;
-        this.rating = rating;
-    }
-
-    public Grievance() {
-
-    }
-
     public void setText(String text) {
         this.text = text;
     }
@@ -41,9 +30,6 @@ public class Grievance {
     public void setRating(long rating) {
         this.rating = rating;
     }
-//    @CreationTimestamp
-//    @Column(name = "CREATED_TS", updatable = false)
-//    private Date createdTs;
 
     public String getText() {
         return text;

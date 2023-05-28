@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +28,8 @@ class GrievanceServiceTest {
         Grievance grievance = Grievance.builder().text("Super Pissed at Mexican Restaurant").rating(4).build();
         Grievance grievance2 = Grievance.builder().text("Horrible Service in Uber").rating(6).build();
         Grievance grievance3 = Grievance.builder().text("Got a speeding ticket FUCK!").rating(10).build();
+        Grievance grievance4 = Grievance.builder().text("Got a speeding ticket FUCK!").rating(10).build();
+        Grievance grievance5 = Grievance.builder().text("Got a speeding ticket FUCK!").rating(10).build();
 
         List<Grievance> grievances = List.of(grievance, grievance2, grievance3);
 
@@ -37,5 +40,7 @@ class GrievanceServiceTest {
         GrievancesResponse expected = GrievancesResponse.builder().grievances(grievances).build();
 
         assertThat(actual).isEqualTo(expected);
+
+        verify(repository).findAll();
     }
 }

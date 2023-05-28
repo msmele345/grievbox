@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: 'grievbox3:latest'
+    image: 'grievbox4:latest'
     build:
       context: .
     container_name: app

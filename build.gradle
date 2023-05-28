@@ -28,6 +28,14 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'com.networknt:json-schema-validator:1.0.81'
+	compileOnly 'com.github.victools:jsonschema-generator:4.31.1'
+
+	testImplementation 'org.testcontainers:postgresql:1.18.1'
+	testImplementation "org.junit.jupiter:junit-jupiter:5.8.1"
+	testImplementation "org.testcontainers:junit-jupiter:1.18.1"
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.assertj:assertj-core:3.23.1'
 
