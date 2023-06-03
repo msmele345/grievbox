@@ -3,7 +3,7 @@ package com.mitchmele.grievbox.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitchmele.grievbox.model.Grievance;
 import com.mitchmele.grievbox.model.GrievancesResponse;
-import com.mitchmele.grievbox.repository.GrievanceRepository;
+import com.mitchmele.grievbox.model.SaveGrievanceRequest;
 import com.mitchmele.grievbox.service.GrievanceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,10 +23,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-
-
-import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class GrievanceControllerTest {
@@ -61,4 +60,26 @@ class GrievanceControllerTest {
 
         verify(grievanceService).getAllGrievances();
     }
+
+
+    @Test
+    void saveGrievance_shouldReturn200_whenCallingWithEncryptedPayload() throws Exception {
+        SaveGrievanceRequest request = SaveGrievanceRequest.builder().jweTokenPayload("eeefefv===C").build();
+
+        mockMvc.perform(post("/grievance")
+                .content(mapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(grievanceService).saveNewGrievance(request);
+    }
 }
+
+
+
+
+
+
+
+
+

@@ -2,6 +2,7 @@ package com.mitchmele.grievbox.service;
 
 import com.mitchmele.grievbox.model.Grievance;
 import com.mitchmele.grievbox.model.GrievancesResponse;
+import com.mitchmele.grievbox.model.SaveGrievanceRequest;
 import com.mitchmele.grievbox.repository.GrievanceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,9 @@ class GrievanceServiceTest {
     @Mock
     private GrievanceRepository repository;
 
+    @Mock
+    private EncryptionService encryptionService;
+
     @InjectMocks
     private GrievanceService service;
 
@@ -28,8 +32,6 @@ class GrievanceServiceTest {
         Grievance grievance = Grievance.builder().text("Super Pissed at Mexican Restaurant").rating(4).build();
         Grievance grievance2 = Grievance.builder().text("Horrible Service in Uber").rating(6).build();
         Grievance grievance3 = Grievance.builder().text("Got a speeding ticket FUCK!").rating(10).build();
-        Grievance grievance4 = Grievance.builder().text("Got a speeding ticket FUCK!").rating(10).build();
-        Grievance grievance5 = Grievance.builder().text("Got a speeding ticket FUCK!").rating(10).build();
 
         List<Grievance> grievances = List.of(grievance, grievance2, grievance3);
 
@@ -42,5 +44,15 @@ class GrievanceServiceTest {
         assertThat(actual).isEqualTo(expected);
 
         verify(repository).findAll();
+    }
+
+    @Test
+    void saveNewGrievance_shouldCallEncryptionService_to_DecryptPayload() {
+        String encryptedPayload = "eesdfgsd===VV";
+        SaveGrievanceRequest saveGrievanceRequest = SaveGrievanceRequest.builder().jweTokenPayload(encryptedPayload).build();
+
+        service.saveNewGrievance(saveGrievanceRequest);
+
+        verify(encryptionService).decryptPayload(encryptedPayload);
     }
 }
