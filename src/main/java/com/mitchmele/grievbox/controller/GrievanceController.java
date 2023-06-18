@@ -21,7 +21,7 @@ public class GrievanceController {
         return ResponseEntity.ok(grievanceService.getAllGrievances());
     }
 
-    @PostMapping("/grievance")
+    @PostMapping("/grievance") //jwe-api calls this endpoint to save with jwe payload
     public ResponseEntity<SaveGrievanceResponse> saveGrievance(@RequestBody SaveGrievanceRequest request) {
         return ResponseEntity.ok(grievanceService.saveNewGrievance(request));
     }

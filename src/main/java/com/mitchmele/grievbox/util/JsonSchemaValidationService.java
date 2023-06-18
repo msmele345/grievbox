@@ -40,7 +40,7 @@ public class JsonSchemaValidationService {
     }
 
     @PostConstruct
-    public void validateSchema() {
+    private void validateSchema() {
         log.info("**VALIDATING**");
         String jsonToValidate = "{\"id\":\"1\",\"text\":\"Super Pissed at Mexican Restaurant\",\"rating\":4}";
         validateJsonPayloadString(jsonToValidate);

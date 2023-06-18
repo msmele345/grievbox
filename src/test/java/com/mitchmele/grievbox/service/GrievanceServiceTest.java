@@ -4,6 +4,7 @@ import com.mitchmele.grievbox.model.Grievance;
 import com.mitchmele.grievbox.model.GrievancesResponse;
 import com.mitchmele.grievbox.model.SaveGrievanceRequest;
 import com.mitchmele.grievbox.repository.GrievanceRepository;
+import com.mitchmele.grievbox.util.JsonSchemaValidationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,14 +13,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GrievanceServiceTest {
 
     @Mock
     private GrievanceRepository repository;
+
+    @Mock
+    private JsonSchemaValidationService schemaValidationService;
 
     @Mock
     private EncryptionService encryptionService;
@@ -51,8 +55,21 @@ class GrievanceServiceTest {
         String encryptedPayload = "eesdfgsd===VV";
         SaveGrievanceRequest saveGrievanceRequest = SaveGrievanceRequest.builder().jweTokenPayload(encryptedPayload).build();
 
+        String decryptedPayload = "{\"id\":\"1\",\"text\":\"Super Pissed at Mexican Restaurant\",\"rating\":4}";
+
+        when(encryptionService.decryptPayload(anyString())).thenReturn(decryptedPayload);
+        when(schemaValidationService.validateJsonPayloadString(anyString())).thenReturn(true);
+        doNothing().when(repository).save(any());
+
+        Grievance expectedGrievanceToSave = Grievance.builder()
+                .text("Super Pissed at Mexican Restaurant")
+                .rating(4)
+                .build();
+
         service.saveNewGrievance(saveGrievanceRequest);
 
         verify(encryptionService).decryptPayload(encryptedPayload);
+//        verify(repository).save(expectedGrievanceToSave); //
+        verify(schemaValidationService).validateJsonPayloadString(decryptedPayload);
     }
 }

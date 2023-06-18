@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class SaveGrievanceResponse {
 
     private String status;
-    private String message;
+    private ResponseMessage message;
 }
