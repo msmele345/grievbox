@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: 'grievbox5:latest'
+    image: 'grievboxregistry.azurecr.io/grievbox5:latest'
     build:
       context: .
     container_name: app
