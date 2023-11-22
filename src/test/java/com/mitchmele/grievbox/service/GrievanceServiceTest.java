@@ -26,7 +26,7 @@ class GrievanceServiceTest {
     private JsonSchemaValidationService schemaValidationService;
 
     @Mock
-    private EncryptionService encryptionService;
+    private JweService jweService;
 
     @InjectMocks
     private GrievanceService service;
@@ -57,7 +57,7 @@ class GrievanceServiceTest {
 
         String decryptedPayload = "{\"id\":\"1\",\"text\":\"Super Pissed at Mexican Restaurant\",\"rating\":4}";
 
-        when(encryptionService.decryptPayload(anyString())).thenReturn(decryptedPayload);
+        when(jweService.decryptPayload(anyString())).thenReturn(decryptedPayload);
         when(schemaValidationService.validateJsonPayloadString(anyString())).thenReturn(true);
         doNothing().when(repository).save(any());
 
@@ -68,7 +68,7 @@ class GrievanceServiceTest {
 
         service.saveNewGrievance(saveGrievanceRequest);
 
-        verify(encryptionService).decryptPayload(encryptedPayload);
+        verify(jweService).decryptPayload(encryptedPayload);
 //        verify(repository).save(expectedGrievanceToSave); //
         verify(schemaValidationService).validateJsonPayloadString(decryptedPayload);
     }

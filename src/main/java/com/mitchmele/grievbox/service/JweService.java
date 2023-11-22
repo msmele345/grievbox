@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EncryptionService {
+public class JweService {
 
     public String decryptPayload(String encryptedPayload) {
         return null;

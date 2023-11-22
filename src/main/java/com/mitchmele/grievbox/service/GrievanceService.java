@@ -12,8 +12,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GrievanceService {
 
+    private final JweService jweService;
     private final GrievanceRepository repository;
-    private final EncryptionService encryptionService;
     private final JsonSchemaValidationService schemaValidationService;
 
     public GrievancesResponse getAllGrievances() {
@@ -24,7 +24,7 @@ public class GrievanceService {
     }
 
     public SaveGrievanceResponse saveNewGrievance(SaveGrievanceRequest encryptedRequest) {
-        String decryptedPayload = encryptionService.decryptPayload(encryptedRequest.getJweTokenPayload());
+        String decryptedPayload = jweService.decryptPayload(encryptedRequest.getJweTokenPayload());
 
         boolean isValidPayload = schemaValidationService.validateJsonPayloadString(decryptedPayload);
         //need mapper for decryptedPayload > Grievance obj
